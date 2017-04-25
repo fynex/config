@@ -54,3 +54,11 @@
         ("z" "Zeiteintrag in tasks.org" entry (file+headline mytaskpath "Inbox")
          "* ZKTO %? \n  %i" :clock-in t :clock-resume t)))
 ```
+
+## Autostart
+
+```
+setxkbmap -option ctrl:nocaps
+xset r rate 200 40
+xset m 1/1 4
+```
