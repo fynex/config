@@ -53,7 +53,7 @@
          "* TODO %?")
         ("z" "Zeiteintrag in tasks.org" entry (file+headline mytaskpath "Inbox")
          "* ZKTO %? \n  %i" :clock-in t :clock-resume t)))
-`
+
 ;; Agenda mit spacemacs aktivieren!!!
 (setq org-agenda-file-to-front t)
 
