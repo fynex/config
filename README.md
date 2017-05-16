@@ -53,7 +53,16 @@
          "* TODO %?")
         ("z" "Zeiteintrag in tasks.org" entry (file+headline mytaskpath "Inbox")
          "* ZKTO %? \n  %i" :clock-in t :clock-resume t)))
-```
+`
+;; Agenda mit spacemacs aktivieren!!!
+(setq org-agenda-file-to-front t)
+
+(add-to-list 'default-frame-alist '(font . "Hack-14" ))
+(set-face-attribute 'default t :font "Hack-14" )
+
+;; Start the week on monday
+(setq calendar-week-start-day 1)
+
 
 ## Autostart
 
