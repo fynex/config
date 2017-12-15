@@ -1,0 +1,76 @@
+from socket import socket
+import ssl
+import OpenSSL
+import argparse
+
+WEAK_HASHES = ["md5", "sha1"]
+PUBKEY_MIN_SIZE = 2048
+
+
+def get_cn(tuple_list):
+    for e in tuple_list:
+        if e and e[0] == b"CN":
+            return e[1]
+
+    return None
+
+
+def get_cert(url):
+    cert = ssl.get_server_certificate((args.url, 443))
+    x509 = OpenSSL.crypto.load_certificate(OpenSSL.crypto.FILETYPE_PEM, cert)
+
+    return x509
+
+
+def check_wildcard(cn):
+    return str(cn).startswith("*.")
+
+
+def check_weak_hash(sig_algo):
+    for wh in WEAK_HASHES:
+        if wh in str(sig_algo):
+            return wh
+
+    return None
+
+def check_has_expired(x509):
+    return x509.has_expired()
+
+
+def check_pubkey_bits_to_small(pubkey_bits):
+    return pubkey_bits < PUBKEY_MIN_SIZE
+
+parser = argparse.ArgumentParser(description='Check for a remote certificate')
+parser.add_argument("-u", '--url', help='The URL to analyze')
+parser.add_argument("-ul", '--url-list', help='The URL to analyze')
+parser.add_argument("-p", '--port', default=443, type=int, help='The URL to analyze')
+
+args = parser.parse_args()
+
+if args.url_list:
+    with open(args.url_list, "r") as f:
+        urls = f.read()
+elif args.url:
+    urls = [args.url]
+else:
+    sys.exit("[!] Please specify either -u or -ul")
+
+for u in urls:
+    x509        = get_cert(u)
+    cn          = get_cn(x509.get_subject().get_components())
+    sig_algo    = x509.get_signature_algorithm()
+    pubkey_bits = x509.get_pubkey().bits()
+    weak_hash   = check_weak_hash(sig_algo)
+
+    if weak_hash:
+        print("[!] Weak Hash: {}".format(weak_hash))
+
+    if check_wildcard(cn):
+        print("[!] Wildcard {}".format(cn))
+
+    if check_has_expired(x509):
+        print("[!] Certificate has expired")
+
+    if check_pubkey_bits_to_small(pubkey_bits):
+        print("[!] Public Key Bit Size too low: {}".format(pubkey_bits))
+
