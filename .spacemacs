@@ -1,8 +1,3 @@
-# config
-
-## Emacs
-
-```
 ;; -*- mode: emacs-lisp -*-
 ;; This file is loaded by Spacemacs at startup.
 ;; It must be stored in your home directory.
@@ -661,12 +656,3 @@ you should place your code here."
  ;; If there is more than one, they won't work right.
  )
 
-```
-
-## Autostart
-
-```
-setxkbmap -option ctrl:nocaps
-xset r rate 200 40
-xset m 1/1 4
-```
