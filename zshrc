@@ -1,3 +1,16 @@
+#### Movement ####
+
+function g() {
+    mkdir ~/.g
+    touch ~/.g/curr_proj
+
+    case "$1" in
+    s) echo `pwd` >! ~/.g/curr_proj ;;
+    p) cd $(cat ~/.g/curr_proj) ;;
+    impacket) cd /usr/share/doc/python3-impacket/examples ;;
+    esac
+}
+
 #### Data Representation ####
 
 func pp() {
